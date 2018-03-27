@@ -20,76 +20,80 @@ mongoose.connect('mongodb://localhost/routes', function() {
 });
 mongoose.Promise = global.Promise;
 var Schema = mongoose.Schema;
-var ObjectSchema = new mongoose.Schema({
+var ItemSchema = new mongoose.Schema({
     title: {type: String, required: true},
     description: {type: String, default: ''},
     completed: {type: Boolean, default: false},
     created_at: {type: Date, default: Date.now},
     updated_at: {type: Date, default: Date.now},
 });
-mongoose.model('Object', ObjectSchema);
-var object = mongoose.model('Object');
+mongoose.model('Item', ItemSchema);
+var Item = mongoose.model('Item');
 
-app.get('/objects', (req, res) => {
-    Object.find({}, function(err, object){
+app.get('/items', (req, res) => {
+    Item.find({}, function(err, item){
         if(err){
+            res.json({message: 'Error', data: err})
+        }
+        else{
+            res.json({message: 'Success', data: item});
+        }
+    });
+});
+
+app.get('/items/:id', (req, res) => {
+    Item.find({_id: req.params.id}, function(error, item){
+        if(error){
             res.json({message: 'error'})
         }
         else{
-            res.json({object: objects});
+            res.json({item: item})
         }
     });
 });
 
-app.get('/objects/:id', (req, res) => {
-    Object.find({_id: req.params.id}, function(error, object){
+app.post('/items', (req, res) => {
+    var item = new Item(req.body);
+    item.save(function(err, item){
         if(err){
-            res.json({message: 'error'})
+            res.json({message: 'Error', data: 'error'})
         }
         else{
-            res.json({object: object})
+            res.json({message: 'Success', data: item})
         }
     });
 });
 
-app.post('/objects', (req, res) => {
-    var object = new Object(req.body);
-    object.save(function(err, object){
+app.put('/items/:id', (req, res) => {
+    var item = Item.findOne({_id: req.params.id}, function(error, item){
+        if (error) {
+            res.json({message: 'Error', error: error})
+        } else {
+            item.title = req.body.title;
+            item.description = req.body.description;
+            item.completed = req.body.completed;
+            item.save(function(err){
+                if(err){
+                    res.json({message: 'error', error: err});
+                }
+                else{
+                    res.json({item: item});
+                }
+            });
+        }
+    });
+});
+
+app.delete('/items/:id', (req, res) => {
+    Item.remove({_id: req.params.id}, function(err, item){
         if(err){
-            res.json({message: 'error'})
+            res.json({Message: 'Error', error: err});
         }
         else{
-            res.json({object: object})
+            res.json({Message: 'Success', item: item});
         }
     });
-});
-
-app.put('/objects/:id', (req, res) => {
-    var object = Object.find({_id: req.params.id}, function(err, object){
-        object.title = req.params.title;
-        object.description = req.params.description;
-        object.completed = req.params.completed;
-        object.save(function(){
-            if(err){
-                res.json({message: 'error'});
-            }
-            else{
-                res.json({object: objects});
-            }
-        });
-    });
-});
-
-app.delete('/objects/:id', (req, res) => {
-    Object.remove({_id: req.params.id}, function(err, object){
-        if(err){
-            res.json({message: 'error'});
-        }
-        else{
-            res.json({object: objects});
-        }
-    });
-});
+}); 
 
 let server = app.listen(6789, () => {
     console.log("listening on port 6789");
