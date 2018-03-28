@@ -1,3 +1,9 @@
-<div *ngFor='let x of items'>
-    <p>{{x.title}} - {{x.description}}</p>
+
+<div>
+  <button id='getTasks' (click) = 'getTasksFromService()'>Get All Items</button>
+  <div *ngFor='let x of items'>
+      <p>{{x.title}} - {{x.description}}</p>
 </div>
+</div>
+
+

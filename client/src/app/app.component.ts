@@ -18,7 +18,6 @@ export class AppComponent implements OnInit {
 constructor(private _httpService: HttpService){}
 
 ngOnInit(){
-  this.getTasksFromService();
 }
 
 getTasksFromService() {
