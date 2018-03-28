@@ -1,29 +1,28 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Http } from '@angular/http';
 
 @Injectable()
 export class HttpService {
-  constructor(private _http: HttpClient){
-    this.getAllItems();
-   }
+  constructor(private _http: Http){
+    }
 
- getAllItems(){
-  let tempObservable = this._http.get('/items');
-  tempObservable.subscribe(data => console.log("Got our items!", data));
+getAllItems(){
+  return this._http.get('/items')
 };
 
-getItem(id){
-  let tempObservable = this._http.get(`/items/${id}`);
-  tempObservable.subscribe(data => console.log("Got our item!", data));
+getItem(item){
+  return this._http.get(`/items/${item._id}`, item);
 };
 
-putItem(id){
-  let tempObservable = this._http.get(`/items/${id}`);
-  tempObservable.subscribe(data => console.log("Item added!", data));
+editItem(item){
+  return this._http.put(`/items/${item._id}`, item);
 };
 
-deleteItems(id){
-  let tempObservable = this._http.get(`/items/${id}`);
-  tempObservable.subscribe(data => console.log("Item deleted!", data));
+addItem(new_item){
+  return this._http.post('/items', new_item);
 };
-}
+
+deleteItem(item){
+  return this._http.delete(`/items/${item._id}`, item);
+};
+};
