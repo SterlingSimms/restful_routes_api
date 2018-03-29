@@ -1,9 +1,27 @@
-
-<div>
-  <button id='getTasks' (click) = 'getTasksFromService()'>Get All Items</button>
-  <div *ngFor='let x of items'>
-      <p>{{x.title}} - {{x.description}}</p>
+<h1>Welcome to my Angular App!</h1>
+<h3>Make a new task:</h3>
+<form (submit)="addItem()">
+    Title: <br><input type="text" name="new_item.title" [(ngModel)]="new_item.title" /><br>
+    Description: <br><input type="text" name="new_item.description" [(ngModel)]="new_item.description" /><br>
+    <input type="submit" value="Create Task" />
+  </form>
+<h3>Task List:</h3>
+<div *ngFor="let item of items">
+<p>
+  {{item.title}} - {{item.description}}<br> 
+  <button (click)="showEditForm(item)">Edit Task</button><br>
+  <button (click)='deleteItem(item)'>Delete Task</button>
+</p>
 </div>
-</div>
+<div *ngIf="edit_form == true">
+  <form (submit)="editItem()">
+      Title: <br><input type="text" name="item.title" [(ngModel)]="item.title" /><br>
+      Description: <br><input type="text" name="item.description" [(ngModel)]="item.description" /><br>
+      <input type="submit" value="Edit Item" />
+    </form>
+  </div>
+  <div *ngIf='errors.length > 0'>
+    <p>{{ errors }}</p>
+  </div>
 
 

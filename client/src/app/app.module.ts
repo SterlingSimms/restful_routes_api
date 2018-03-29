@@ -6,6 +6,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpService } from './http.service';
 import { HttpModule } from '@angular/http';
+import { FormsModule } from '@angular/forms';
+
 
 
 
@@ -17,6 +19,7 @@ import { HttpModule } from '@angular/http';
     BrowserModule,
     AppRoutingModule,
     HttpModule,
+    FormsModule,
   ],
   providers: [HttpService],
   bootstrap: [AppComponent]
